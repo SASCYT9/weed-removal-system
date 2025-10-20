@@ -1,0 +1,79 @@
+# Weed Removal System Configuration
+
+# Camera Settings
+camera:
+  resolution: [1920, 1080]
+  framerate: 30
+  format: "RGB888"
+  rotation: 0
+  exposure_mode: "auto"
+
+# Detection Settings
+detection:
+  model_path: "models/yolov8n.tflite"
+  confidence_threshold: 0.5
+  iou_threshold: 0.45
+  input_size: [640, 640]
+  classes:
+    - "weed"
+    - "crop"
+
+# Navigation Settings
+navigation:
+  gps:
+    port: "/dev/ttyACM0"
+    baudrate: 38400
+    timeout: 1.0
+  imu:
+    port: "/dev/ttyUSB0"
+    baudrate: 115200
+  kalman_filter:
+    process_noise: 0.1
+    measurement_noise: 0.1
+    initial_estimate_error: 1.0
+
+# Control Settings
+control:
+  motors:
+    left_pwm_pin: 12
+    left_dir_pin: 16
+    right_pwm_pin: 13
+    right_dir_pin: 18
+  pid:
+    kp: 1.0
+    ki: 0.1
+    kd: 0.05
+  pure_pursuit:
+    lookahead_distance: 1.0  # meters
+    max_speed: 0.5  # m/s
+    wheel_base: 0.4  # meters
+
+# Weeding Settings
+weeding:
+  mechanism_pin: 22
+  activation_duration: 0.5  # seconds
+  offset_x: 0.0  # meters from camera
+  offset_y: 0.2  # meters from camera
+
+# Telemetry Settings
+telemetry:
+  web:
+    host: "0.0.0.0"
+    port: 5000
+    debug: false
+  mqtt:
+    broker: "localhost"
+    port: 1883
+    topic_prefix: "weed_robot"
+    keepalive: 60
+  logging:
+    level: "INFO"
+    log_file: "data/logs/robot.log"
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+# System Settings
+system:
+  update_rate: 20  # Hz
+  emergency_stop_pin: 24
+  status_led_pin: 25

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weed Removal Robot - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Weed Removal Robot Dashboard</h1>
+            <div id="connection-status" class="status-indicator offline">Offline</div>
+        </header>
+
+        <div class="dashboard">
+            <!-- Robot Status -->
+            <div class="panel status-panel">
+                <h2>Robot Status</h2>
+                <div class="status-info">
+                    <div class="status-item">
+                        <span class="label">Status:</span>
+                        <span id="robot-status" class="value">Idle</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">GPS Fix:</span>
+                        <span id="gps-fix" class="value">No Fix</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Battery:</span>
+                        <span id="battery" class="value">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Position -->
+            <div class="panel position-panel">
+                <h2>Position</h2>
+                <div class="position-info">
+                    <div class="coord">
+                        <span class="label">Latitude:</span>
+                        <span id="latitude" class="value">--</span>
+                    </div>
+                    <div class="coord">
+                        <span class="label">Longitude:</span>
+                        <span id="longitude" class="value">--</span>
+                    </div>
+                    <div class="coord">
+                        <span class="label">Heading:</span>
+                        <span id="heading" class="value">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="panel stats-panel">
+                <h2>Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="weeds-detected">0</div>
+                        <div class="stat-label">Weeds Detected</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="weeds-removed">0</div>
+                        <div class="stat-label">Weeds Removed</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="distance-traveled">0.0</div>
+                        <div class="stat-label">Distance (m)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="panel controls-panel">
+                <h2>Controls</h2>
+                <div class="controls">
+                    <button class="btn btn-success" onclick="sendCommand('start')">Start</button>
+                    <button class="btn btn-warning" onclick="sendCommand('pause')">Pause</button>
+                    <button class="btn btn-danger" onclick="sendCommand('stop')">Stop</button>
+                    <button class="btn btn-info" onclick="sendCommand('reset')">Reset</button>
+                </div>
+            </div>
+
+            <!-- Live Feed -->
+            <div class="panel feed-panel">
+                <h2>Detection Feed</h2>
+                <div id="detection-feed" class="feed">
+                    <p>No recent detections</p>
+                </div>
+            </div>
+
+            <!-- Telemetry -->
+            <div class="panel telemetry-panel">
+                <h2>Telemetry</h2>
+                <div id="telemetry-data" class="telemetry">
+                    <p>Waiting for data...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
