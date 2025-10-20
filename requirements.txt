@@ -30,11 +30,17 @@ python-socketio>=5.9.0
 # Data Processing and Math
 scipy>=1.11.0
 pandas>=2.0.0
+matplotlib>=3.7.0
 
 # Configuration and Utilities
 PyYAML>=6.0
 python-dotenv>=1.0.0
 loguru>=0.7.0
+tqdm>=4.65.0
+requests>=2.31.0
+
+# Dataset and Training Tools
+roboflow>=1.1.0
 
 # Testing
 pytest>=7.4.0
