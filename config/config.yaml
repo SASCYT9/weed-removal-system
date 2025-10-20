@@ -24,7 +24,7 @@ camera:
 
 # Detection Settings
 detection:
-  model_path: "models/yolov8n.tflite"
+  model_path: "yolov8n.pt"  # Use PyTorch model (auto-downloads), or "models/yolov8n.tflite" for TFLite
   confidence_threshold: 0.5
   iou_threshold: 0.45
   input_size: [640, 640]

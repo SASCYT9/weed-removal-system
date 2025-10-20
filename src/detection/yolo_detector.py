@@ -68,8 +68,16 @@ class YOLODetector:
         """Load TensorFlow Lite model."""
         try:
             import tflite_runtime.interpreter as tflite
+            logger.info("Using tflite_runtime")
         except ImportError:
-            import tensorflow.lite as tflite
+            try:
+                import tensorflow.lite as tflite
+                logger.info("Using tensorflow.lite")
+            except ImportError:
+                raise ImportError(
+                    "TensorFlow Lite not available. Install with: pip install tflite-runtime\n"
+                    "Or use PyTorch model (.pt) instead by changing model_path in config.yaml"
+                )
 
         self.interpreter = tflite.Interpreter(model_path=self.model_path)
         self.interpreter.allocate_tensors()
