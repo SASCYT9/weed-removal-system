@@ -1,107 +1,309 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Autonomous weed removal robot control system">
+    <meta name="theme-color" content="#667eea">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
     <title>Weed Removal Robot - Dashboard</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Install button */
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            transition: transform 0.2s;
+        }
+
+        #install-button:hover {
+            transform: translateY(-2px);
+        }
+
+        #install-button:active {
+            transform: translateY(0);
+        }
+
+        /* Offline indicator */
+        .offline-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ff9800;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            z-index: 1001;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Update available banner */
+        .update-banner {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .update-banner button {
+            background: white;
+            color: #4caf50;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <!-- Offline Mode Indicator -->
+    <div class="offline-mode" id="offline-indicator">
+        <span class="loading-spinner"></span>
+        Ви в офлайн режимі - з'єднання відновлюється...
+    </div>
+
+    <!-- Update Available Banner -->
+    <div class="update-banner" id="update-banner">
+        <span>Доступне оновлення!</span>
+        <button onclick="updateApp()">Оновити зараз</button>
+    </div>
+
+    <!-- Install PWA Button -->
+    <button id="install-button" onclick="installPWA()">
+        📱 Встановити додаток
+    </button>
+
     <div class="container">
         <header>
-            <h1>Weed Removal Robot Dashboard</h1>
+            <h1>🤖 Weed Removal Robot</h1>
             <div id="connection-status" class="status-indicator offline">Offline</div>
         </header>
 
         <div class="dashboard">
             <!-- Robot Status -->
             <div class="panel status-panel">
-                <h2>Robot Status</h2>
+                <h2>Статус Робота</h2>
                 <div class="status-info">
                     <div class="status-item">
-                        <span class="label">Status:</span>
-                        <span id="robot-status" class="value">Idle</span>
+                        <span class="label">Статус:</span>
+                        <span id="robot-status" class="value">Очікування</span>
                     </div>
                     <div class="status-item">
                         <span class="label">GPS Fix:</span>
-                        <span id="gps-fix" class="value">No Fix</span>
+                        <span id="gps-fix" class="value">Немає сигналу</span>
                     </div>
                     <div class="status-item">
-                        <span class="label">Battery:</span>
+                        <span class="label">Батарея:</span>
                         <span id="battery" class="value">--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">Режим:</span>
+                        <span id="mode" class="value">Авто</span>
                     </div>
                 </div>
             </div>
 
             <!-- Position -->
             <div class="panel position-panel">
-                <h2>Position</h2>
+                <h2>📍 Позиція</h2>
                 <div class="position-info">
                     <div class="coord">
-                        <span class="label">Latitude:</span>
+                        <span class="label">Широта:</span>
                         <span id="latitude" class="value">--</span>
                     </div>
                     <div class="coord">
-                        <span class="label">Longitude:</span>
+                        <span class="label">Довгота:</span>
                         <span id="longitude" class="value">--</span>
                     </div>
                     <div class="coord">
-                        <span class="label">Heading:</span>
+                        <span class="label">Напрямок:</span>
                         <span id="heading" class="value">--</span>
+                    </div>
+                    <div class="coord">
+                        <span class="label">Швидкість:</span>
+                        <span id="speed" class="value">-- m/s</span>
                     </div>
                 </div>
             </div>
 
             <!-- Statistics -->
             <div class="panel stats-panel">
-                <h2>Statistics</h2>
+                <h2>📊 Статистика</h2>
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-value" id="weeds-detected">0</div>
-                        <div class="stat-label">Weeds Detected</div>
+                        <div class="stat-label">Виявлено</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-value" id="weeds-removed">0</div>
-                        <div class="stat-label">Weeds Removed</div>
+                        <div class="stat-label">Видалено</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-value" id="distance-traveled">0.0</div>
-                        <div class="stat-label">Distance (m)</div>
+                        <div class="stat-label">Відстань (м)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="efficiency">0</div>
+                        <div class="stat-label">Ефективність %</div>
                     </div>
                 </div>
             </div>
 
             <!-- Controls -->
             <div class="panel controls-panel">
-                <h2>Controls</h2>
+                <h2>🎮 Керування</h2>
                 <div class="controls">
-                    <button class="btn btn-success" onclick="sendCommand('start')">Start</button>
-                    <button class="btn btn-warning" onclick="sendCommand('pause')">Pause</button>
-                    <button class="btn btn-danger" onclick="sendCommand('stop')">Stop</button>
-                    <button class="btn btn-info" onclick="sendCommand('reset')">Reset</button>
+                    <button class="btn btn-success" onclick="sendCommand('start')">▶️ Старт</button>
+                    <button class="btn btn-warning" onclick="sendCommand('pause')">⏸️ Пауза</button>
+                    <button class="btn btn-danger" onclick="sendCommand('stop')">⏹️ Стоп</button>
+                    <button class="btn btn-info" onclick="sendCommand('reset')">🔄 Скинути</button>
                 </div>
             </div>
 
             <!-- Live Feed -->
             <div class="panel feed-panel">
-                <h2>Detection Feed</h2>
+                <h2>🔴 Детекції</h2>
                 <div id="detection-feed" class="feed">
-                    <p>No recent detections</p>
+                    <p>Немає останніх детекцій</p>
                 </div>
             </div>
 
             <!-- Telemetry -->
             <div class="panel telemetry-panel">
-                <h2>Telemetry</h2>
+                <h2>📡 Телеметрія</h2>
                 <div id="telemetry-data" class="telemetry">
-                    <p>Waiting for data...</p>
+                    <p>Очікування даних...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    <!-- PWA Installation Script -->
+    <script>
+        let deferredPrompt;
+        let swRegistration;
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered:', registration);
+                        swRegistration = registration;
+
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New update available
+                                    document.getElementById('update-banner').style.display = 'flex';
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+
+        // Install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-button').style.display = 'block';
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('install-button').style.display = 'none';
+                });
+            }
+        }
+
+        // Update app
+        function updateApp() {
+            if (swRegistration && swRegistration.waiting) {
+                swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            }
+        }
+
+        // Online/Offline detection
+        window.addEventListener('online', () => {
+            document.getElementById('offline-indicator').style.display = 'none';
+            console.log('Back online');
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-indicator').style.display = 'block';
+            console.log('Gone offline');
+        });
+
+        // Request notification permission
+        if ('Notification' in window && navigator.serviceWorker) {
+            Notification.requestPermission().then(permission => {
+                console.log('Notification permission:', permission);
+            });
+        }
+    </script>
 </body>
 </html>
