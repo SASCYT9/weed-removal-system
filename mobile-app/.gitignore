@@ -1,0 +1,32 @@
+# OSX
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Android
+android/.gradle
+android/build/
+android/app/build/
+android/app/release/
+*.iml
+*.hprof
+
+# iOS
+ios/build/
+ios/Pods/
+*.xcworkspace
+!default.xcworkspace
+
+# VS Code
+.vscode/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Misc
+*.log
+*.lock

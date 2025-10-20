@@ -6,25 +6,12 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar, StyleSheet, Platform, PermissionsAndroid} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MainNavigator from './src/navigation/MainNavigator';
 import {MQTTProvider} from './src/services/MQTTService';
-import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Configure push notifications
-PushNotification.configure({
-  onNotification: function (notification) {
-    console.log('NOTIFICATION:', notification);
-  },
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-  popInitialNotification: true,
-  requestPermissions: Platform.OS === 'ios',
-});
+// Push notifications can be configured later; keeping minimal for now
 
 function App(): JSX.Element {
   const [isReady, setIsReady] = useState(false);
@@ -68,18 +55,16 @@ function App(): JSX.Element {
   }
 
   return (
-    <SafeAreaProvider>
-      <MQTTProvider>
-        <NavigationContainer>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="#667eea"
-            translucent={false}
-          />
-          <MainNavigator />
-        </NavigationContainer>
-      </MQTTProvider>
-    </SafeAreaProvider>
+    <MQTTProvider>
+      <NavigationContainer>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#667eea"
+          translucent={false}
+        />
+        <MainNavigator />
+      </NavigationContainer>
+    </MQTTProvider>
   );
 }
 

@@ -5,6 +5,7 @@ const urlsToCache = [
   '/static/css/style.css',
   '/static/js/dashboard.js',
   '/static/manifest.json',
+  '/static/offline.html',
   'https://cdn.socket.io/4.5.4/socket.io.min.js',
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
@@ -76,10 +77,17 @@ self.addEventListener('fetch', event => {
         }).catch(error => {
           console.log('[ServiceWorker] Fetch failed:', error);
           // Return offline page if available
-          return caches.match('/offline.html');
+          return caches.match('/static/offline.html');
         });
       })
   );
+});
+
+// Listen for SKIP_WAITING messages to activate updated SW immediately
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
 // Background sync for offline actions

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Офлайн | WeedBot</title>
+    <style>
+        body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f5f7fb; margin: 0; }
+        .card { background: white; padding: 32px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.08); max-width: 460px; text-align: center; }
+        h1 { margin: 0 0 10px; font-size: 22px; color: #333; }
+        p { color: #555; margin: 0 0 18px; }
+        .hint { font-size: 14px; color: #777; }
+        .btn { display: inline-block; margin-top: 16px; background: #667eea; color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; }
+    </style>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="icon" href="/static/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
+    <meta name="robots" content="noindex">
+    <script>
+        window.addEventListener('online', () => location.replace('/'));
+    </script>
+    <noscript>
+        <style>.btn{display:none}</style>
+    </noscript>
+    
+</head>
+<body>
+    <div class="card">
+        <h1>Ви офлайн</h1>
+        <p>Немає підключення до робота. Перевірте Wi‑Fi або мережу.</p>
+        <p class="hint">Якщо додаток встановлено як PWA, частина функцій буде доступна офлайн. Дані синхронізуються після відновлення зв'язку.</p>
+        <a class="btn" href="/">Спробувати знову</a>
+    </div>
+</body>
+</html>

@@ -5,6 +5,8 @@ from flask_socketio import SocketIO, emit
 import json
 import time
 from typing import Dict, Any
+import os
+from PIL import Image, ImageDraw, ImageFont
 from ..utils.logger import app_logger
 
 logger = app_logger.get_logger(__name__)
@@ -57,6 +59,12 @@ class WebServer:
 
         # Setup routes
         self._setup_routes()
+
+        # Ensure PWA static assets exist (icons, screenshots)
+        try:
+            self._ensure_pwa_assets()
+        except Exception as e:
+            logger.warning(f"Failed to ensure PWA assets: {e}")
 
         logger.info(f"Web server initialized on {host}:{port}")
 
@@ -166,3 +174,85 @@ class WebServer:
         )
         thread.start()
         logger.info("Web server started in background")
+
+    def _ensure_pwa_assets(self):
+        """Create required PWA icon and image assets if missing using Pillow."""
+        base_static = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../web/static'))
+        icons_dir = os.path.join(base_static, 'icons')
+        images_dir = os.path.join(base_static, 'images')
+        os.makedirs(icons_dir, exist_ok=True)
+        os.makedirs(images_dir, exist_ok=True)
+
+        # Icon sizes to generate
+        icon_specs = [
+            (72, 'icon-72x72.png'),
+            (96, 'icon-96x96.png'),
+            (128, 'icon-128x128.png'),
+            (144, 'icon-144x144.png'),
+            (152, 'icon-152x152.png'),
+            (192, 'icon-192x192.png'),
+            (384, 'icon-384x384.png'),
+            (512, 'icon-512x512.png'),
+        ]
+
+        def ensure_icon(size: int, name: str, label: str = 'WB', bg: tuple = (102, 126, 234)):
+            path = os.path.join(icons_dir, name)
+            if os.path.exists(path):
+                return
+            img = Image.new('RGBA', (size, size), bg + (255,))
+            draw = ImageDraw.Draw(img)
+            # Simple rounded rectangle background
+            radius = int(size * 0.18)
+            draw.rounded_rectangle([(0, 0), (size-1, size-1)], radius=radius, fill=bg)
+            # Add label text
+            try:
+                # Try to use a common system font; fallback to default
+                font = ImageFont.truetype("arial.ttf", int(size * 0.38))
+            except Exception:
+                font = ImageFont.load_default()
+            # Use textbbox instead of deprecated textsize
+            bbox = draw.textbbox((0, 0), label, font=font)
+            text_w = bbox[2] - bbox[0]
+            text_h = bbox[3] - bbox[1]
+            draw.text(((size - text_w) / 2, (size - text_h) / 2), label, fill=(255, 255, 255, 255), font=font)
+            img.save(path, format='PNG')
+            logger.info(f"Generated PWA icon: {path}")
+
+        for sz, fname in icon_specs:
+            ensure_icon(sz, fname)
+
+        # Badge and action icons
+        if not os.path.exists(os.path.join(icons_dir, 'badge-72x72.png')):
+            ensure_icon(72, 'badge-72x72.png', label='WB', bg=(118, 75, 162))
+        if not os.path.exists(os.path.join(icons_dir, 'view.png')):
+            ensure_icon(96, 'view.png', label='▶', bg=(76, 175, 80))
+        if not os.path.exists(os.path.join(icons_dir, 'close.png')):
+            ensure_icon(96, 'close.png', label='✕', bg=(244, 67, 54))
+        if not os.path.exists(os.path.join(icons_dir, 'start.png')):
+            ensure_icon(96, 'start.png', label='GO', bg=(76, 175, 80))
+        if not os.path.exists(os.path.join(icons_dir, 'stop.png')):
+            ensure_icon(96, 'stop.png', label='STOP', bg=(244, 67, 54))
+
+        # Screenshot placeholder
+        screenshot_path = os.path.join(images_dir, 'screenshot1.png')
+        if not os.path.exists(screenshot_path):
+            w, h = 540, 720
+            img = Image.new('RGB', (w, h), (245, 247, 251))
+            draw = ImageDraw.Draw(img)
+            # Title bar
+            draw.rectangle([(0, 0), (w, 72)], fill=(102, 126, 234))
+            try:
+                font_title = ImageFont.truetype('arial.ttf', 28)
+                font_body = ImageFont.truetype('arial.ttf', 18)
+            except Exception:
+                font_title = ImageFont.load_default()
+                font_body = ImageFont.load_default()
+            draw.text((16, 20), 'Weed Removal Robot', fill=(255, 255, 255), font=font_title)
+            # Content blocks
+            y = 110
+            for title, color in [('Статус', (255, 255, 255)), ('Позиція', (255, 255, 255)), ('Статистика', (255, 255, 255))]:
+                draw.rounded_rectangle([(16, y), (w-16, y+120)], radius=12, fill=color, outline=(224,224,224))
+                draw.text((32, y+16), title, fill=(51,51,51), font=font_body)
+                y += 140
+            img.save(screenshot_path, format='PNG')
+            logger.info(f"Generated PWA screenshot: {screenshot_path}")
