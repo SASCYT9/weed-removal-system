@@ -199,3 +199,46 @@ class MotorController:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
         self.cleanup()
+
+
+class MockMotorController(MotorController):
+    """Mock motor controller for development/testing without hardware."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize mock motor controller."""
+        super().__init__(*args, **kwargs)
+        self.current_left_speed = 0.0
+        self.current_right_speed = 0.0
+        logger.info("🔧 Mock Motor Controller initialized (simulated motors)")
+
+    def setup(self):
+        """Mock setup - no GPIO needed."""
+        self._initialized = True
+        logger.info("🔧 Mock motors setup complete")
+
+    def set_motor_speeds(self, left_speed: float, right_speed: float):
+        """Simulate motor speed setting."""
+        self.current_left_speed = max(-self.max_speed, min(left_speed, self.max_speed))
+        self.current_right_speed = max(-self.max_speed, min(right_speed, self.max_speed))
+        
+        logger.debug(f"🔧 Mock motors: L={self.current_left_speed:.2f}, R={self.current_right_speed:.2f}")
+
+    def set_differential_drive(self, linear_velocity: float, angular_velocity: float):
+        """Simulate differential drive."""
+        wheel_base = 0.4  # meters
+        left_speed = linear_velocity - (angular_velocity * wheel_base / 2)
+        right_speed = linear_velocity + (angular_velocity * wheel_base / 2)
+        
+        self.set_motor_speeds(left_speed, right_speed)
+        logger.debug(f"🔧 Mock differential drive: linear={linear_velocity:.2f}, angular={angular_velocity:.2f}")
+
+    def stop(self):
+        """Simulate motor stop."""
+        self.current_left_speed = 0.0
+        self.current_right_speed = 0.0
+        logger.info("🔧 Mock motors stopped")
+
+    def cleanup(self):
+        """Mock cleanup - no GPIO to clean."""
+        self._initialized = False
+        logger.info("🔧 Mock motors cleaned up")

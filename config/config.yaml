@@ -1,5 +1,16 @@
 # Weed Removal System Configuration
 
+# Development Mode Settings
+development:
+  enabled: true  # Set to false on Raspberry Pi
+  camera_source: "webcam"  # Options: "webcam", "ip_camera", "video_file", "images"
+  ip_camera_url: "http://192.168.1.100:8080/video"  # IP Webcam app URL
+  video_file_path: "data/test_video.mp4"
+  images_folder: "data/test_images"
+  simulate_gps: true
+  simulate_motors: true
+  simulate_sensors: true
+
 # Camera Settings
 camera:
   resolution: [1920, 1080]
@@ -7,6 +18,9 @@ camera:
   format: "RGB888"
   rotation: 0
   exposure_mode: "auto"
+  # Webcam settings (for development)
+  webcam_index: 0  # Default webcam
+  ip_camera_timeout: 5  # seconds
 
 # Detection Settings
 detection:

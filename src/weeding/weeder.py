@@ -236,3 +236,52 @@ class Weeder:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
         self.cleanup()
+
+
+class MockWeeder(Weeder):
+    """Mock weeder for development/testing without hardware."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize mock weeder."""
+        super().__init__(*args, **kwargs)
+        self.activation_count = 0
+        logger.info("🔧 Mock Weeder initialized (simulated mechanism)")
+
+    def setup(self):
+        """Mock setup - no GPIO needed."""
+        self._initialized = True
+        logger.info("🔧 Mock weeder setup complete")
+
+    def activate(self, weed_position: Tuple[float, float] = None, robot_position: Tuple[float, float] = None):
+        """Simulate weeding mechanism activation."""
+        if not self._initialized:
+            logger.warning("Weeder not initialized")
+            return
+
+        self.activation_count += 1
+        logger.info(f"🔧 Mock weeder activated #{self.activation_count} at position {weed_position}")
+
+        # Simulate activation time
+        time.sleep(self.activation_duration)
+
+        # Record action
+        action = WeedingAction(
+            timestamp=time.time(),
+            weed_position=weed_position if weed_position else (0, 0),
+            robot_position=robot_position if robot_position else (0, 0),
+            confidence=1.0,
+            success=True
+        )
+        self.weeding_history.append(action)
+
+        logger.info(f"🔧 Mock weeding complete (total: {self.activation_count})")
+
+    def emergency_stop(self):
+        """Simulate emergency stop."""
+        self._active = False
+        logger.warning("🔧 Mock weeder emergency stop activated")
+
+    def cleanup(self):
+        """Mock cleanup - no GPIO to clean."""
+        self._initialized = False
+        logger.info(f"🔧 Mock weeder cleaned up (total activations: {self.activation_count})")

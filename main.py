@@ -82,11 +82,32 @@ class WeedRemovalRobot:
         logger.info("Initializing vision subsystem...")
 
         cam_config = self.config.get('camera', {})
-        self.camera = Camera(
-            resolution=tuple(cam_config.get('resolution', [1920, 1080])),
-            framerate=cam_config.get('framerate', 30),
-            format=cam_config.get('format', 'RGB888')
-        )
+        dev_config = self.config.get('development', {})
+        
+        # Determine camera source based on development mode
+        if dev_config.get('enabled', False):
+            source = dev_config.get('camera_source', 'webcam')
+            logger.info(f"🔧 DEVELOPMENT MODE: Using {source}")
+            
+            self.camera = Camera(
+                resolution=tuple(cam_config.get('resolution', [1920, 1080])),
+                framerate=cam_config.get('framerate', 30),
+                format=cam_config.get('format', 'RGB888'),
+                source=source,
+                webcam_index=cam_config.get('webcam_index', 0),
+                ip_camera_url=dev_config.get('ip_camera_url'),
+                video_file=dev_config.get('video_file_path'),
+                images_folder=dev_config.get('images_folder')
+            )
+        else:
+            # Production mode - use PiCamera
+            logger.info("🚀 PRODUCTION MODE: Using Raspberry Pi Camera")
+            self.camera = Camera(
+                resolution=tuple(cam_config.get('resolution', [1920, 1080])),
+                framerate=cam_config.get('framerate', 30),
+                format=cam_config.get('format', 'RGB888'),
+                source='picamera'
+            )
 
         det_config = self.config.get('detection', {})
         self.preprocessor = ImagePreprocessor(
@@ -116,12 +137,26 @@ class WeedRemovalRobot:
         """Initialize navigation subsystem."""
         logger.info("Initializing navigation subsystem...")
 
-        gps_config = self.config.get('navigation.gps', {})
-        self.gps = GPS(
-            port=gps_config.get('port', '/dev/ttyACM0'),
-            baudrate=gps_config.get('baudrate', 38400),
-            timeout=gps_config.get('timeout', 1.0)
-        )
+        dev_config = self.config.get('development', {})
+        
+        if dev_config.get('enabled', False) and dev_config.get('simulate_gps', False):
+            # Use mock GPS for development
+            logger.info("🔧 DEVELOPMENT MODE: Using simulated GPS")
+            from src.navigation.gps import MockGPS
+            gps_config = self.config.get('navigation.gps', {})
+            self.gps = MockGPS(
+                port=gps_config.get('port', '/dev/ttyACM0'),
+                baudrate=gps_config.get('baudrate', 38400),
+                timeout=gps_config.get('timeout', 1.0)
+            )
+        else:
+            # Use real GPS
+            gps_config = self.config.get('navigation.gps', {})
+            self.gps = GPS(
+                port=gps_config.get('port', '/dev/ttyACM0'),
+                baudrate=gps_config.get('baudrate', 38400),
+                timeout=gps_config.get('timeout', 1.0)
+            )
 
         kf_config = self.config.get('navigation.kalman_filter', {})
         self.kalman_filter = NavigationKalmanFilter(
@@ -136,14 +171,29 @@ class WeedRemovalRobot:
         """Initialize control subsystem."""
         logger.info("Initializing control subsystem...")
 
+        dev_config = self.config.get('development', {})
         motor_config = self.config.get('control.motors', {})
-        self.motor_controller = MotorController(
-            left_pwm_pin=motor_config.get('left_pwm_pin', 12),
-            left_dir_pin=motor_config.get('left_dir_pin', 16),
-            right_pwm_pin=motor_config.get('right_pwm_pin', 13),
-            right_dir_pin=motor_config.get('right_dir_pin', 18),
-            max_speed=self.config.get('control.pure_pursuit.max_speed', 1.0)
-        )
+        
+        if dev_config.get('enabled', False) and dev_config.get('simulate_motors', False):
+            # Use mock motor controller for development
+            logger.info("🔧 DEVELOPMENT MODE: Using simulated motors")
+            from src.control.motor_controller import MockMotorController
+            self.motor_controller = MockMotorController(
+                left_pwm_pin=motor_config.get('left_pwm_pin', 12),
+                left_dir_pin=motor_config.get('left_dir_pin', 16),
+                right_pwm_pin=motor_config.get('right_pwm_pin', 13),
+                right_dir_pin=motor_config.get('right_dir_pin', 18),
+                max_speed=self.config.get('control.pure_pursuit.max_speed', 1.0)
+            )
+        else:
+            # Use real motor controller
+            self.motor_controller = MotorController(
+                left_pwm_pin=motor_config.get('left_pwm_pin', 12),
+                left_dir_pin=motor_config.get('left_dir_pin', 16),
+                right_pwm_pin=motor_config.get('right_pwm_pin', 13),
+                right_dir_pin=motor_config.get('right_dir_pin', 18),
+                max_speed=self.config.get('control.pure_pursuit.max_speed', 1.0)
+            )
 
         pid_config = self.config.get('control.pid', {})
         self.pid_controller = PIDController(
@@ -165,13 +215,27 @@ class WeedRemovalRobot:
         """Initialize weeding subsystem."""
         logger.info("Initializing weeding subsystem...")
 
+        dev_config = self.config.get('development', {})
         weed_config = self.config.get('weeding', {})
-        self.weeder = Weeder(
-            mechanism_pin=weed_config.get('mechanism_pin', 22),
-            activation_duration=weed_config.get('activation_duration', 0.5),
-            offset_x=weed_config.get('offset_x', 0.0),
-            offset_y=weed_config.get('offset_y', 0.2)
-        )
+        
+        if dev_config.get('enabled', False) and dev_config.get('simulate_sensors', False):
+            # Use mock weeder for development
+            logger.info("🔧 DEVELOPMENT MODE: Using simulated weeder")
+            from src.weeding.weeder import MockWeeder
+            self.weeder = MockWeeder(
+                mechanism_pin=weed_config.get('mechanism_pin', 22),
+                activation_duration=weed_config.get('activation_duration', 0.5),
+                offset_x=weed_config.get('offset_x', 0.0),
+                offset_y=weed_config.get('offset_y', 0.2)
+            )
+        else:
+            # Use real weeder
+            self.weeder = Weeder(
+                mechanism_pin=weed_config.get('mechanism_pin', 22),
+                activation_duration=weed_config.get('activation_duration', 0.5),
+                offset_x=weed_config.get('offset_x', 0.0),
+                offset_y=weed_config.get('offset_y', 0.2)
+            )
 
         logger.info("Weeding subsystem initialized")
 

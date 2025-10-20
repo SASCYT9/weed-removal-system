@@ -2,6 +2,8 @@
 
 import serial
 import pynmea2
+import time
+import math
 from dataclasses import dataclass
 from typing import Optional
 from threading import Thread, Lock
@@ -235,3 +237,54 @@ class GPS:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit."""
         self.stop()
+
+
+class MockGPS(GPS):
+    """Mock GPS for development/testing without hardware."""
+
+    def __init__(self, port: str = "/dev/ttyACM0", baudrate: int = 38400, timeout: float = 1.0):
+        """Initialize mock GPS."""
+        super().__init__(port, baudrate, timeout)
+        self.start_time = time.time()
+        logger.info("🔧 Mock GPS initialized (simulated data)")
+
+    def start(self):
+        """Start mock GPS (no serial connection needed)."""
+        self._running = True
+        self._current_data = GPSData(
+            latitude=50.4501,  # Kyiv coordinates as starting point
+            longitude=30.5234,
+            altitude=150.0,
+            speed=0.5,
+            heading=90.0,
+            fix_quality=4,  # RTK fixed
+            satellites=12,
+            hdop=0.8,
+            timestamp=time.time()
+        )
+        logger.info("🔧 Mock GPS started with simulated RTK fix")
+
+    def get_data(self) -> Optional[GPSData]:
+        """Get simulated GPS data with changing position."""
+        if not self._running or not self._current_data:
+            return None
+        
+        # Simulate movement in a pattern
+        elapsed = time.time() - self.start_time
+        
+        # Move in a circle with radius 0.0001 degrees (~11 meters)
+        radius = 0.0001
+        angular_speed = 0.1  # rad/s
+        
+        self._current_data.latitude = 50.4501 + radius * math.sin(angular_speed * elapsed)
+        self._current_data.longitude = 30.5234 + radius * math.cos(angular_speed * elapsed)
+        self._current_data.heading = (angular_speed * elapsed * 180 / math.pi) % 360
+        self._current_data.speed = 0.5 + 0.2 * math.sin(elapsed * 0.5)
+        self._current_data.timestamp = time.time()
+        
+        return self._current_data
+
+    def stop(self):
+        """Stop mock GPS."""
+        self._running = False
+        logger.info("🔧 Mock GPS stopped")
