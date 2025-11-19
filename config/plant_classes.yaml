@@ -1,0 +1,677 @@
+# 🌾 БАЗА ДАНИХ КЛАСІВ РОСЛИН
+# Автоматично згенеровано на основі моделі best.pt
+# ============================================================
+
+# Кількість класів: 72
+# Версія: 1.0
+# Дата: 2025-11-05
+
+classes:
+  # === БУР'ЯНИ / WEEDS ===
+  
+  0:
+    name: "Амброзія полинолиста"
+    name_en: "Ragweed"
+    category: "weed"
+    priority: "critical"
+    description: "Дуже небезпечний бур'ян, викликає алергію"
+    action: "remove"
+    color: [255, 0, 0]
+  
+  1:
+    name: "Амброзія триреберникова"
+    name_en: "Giant Ragweed"
+    category: "weed"
+    priority: "critical"
+    description: "Інвазивний бур'ян, алергенний"
+    action: "remove"
+    color: [255, 0, 0]
+  
+  2:
+    name: "Циклахена дурнишниколиста"
+    name_en: "Iva xanthiifolia"
+    category: "weed"
+    priority: "high"
+    description: "Карантинний бур'ян"
+    action: "remove"
+    color: [255, 50, 0]
+  
+  3:
+    name: "Ів��дурнишниколиста"
+    name_en: "Iva xanthiifolia"
+    category: "weed"
+    priority: "high"
+    description: "Карантинний бур'ян"
+    action: "remove"
+    color: [255, 50, 0]
+  
+  4:
+    name: "Березка польова"
+    name_en: "Field Bindweed"
+    category: "weed"
+    priority: "high"
+    description: "В'юнка рослина, обплутує культури"
+    action: "remove"
+    color: [255, 80, 0]
+  
+  5:
+    name: "Осот рожевий (бодяк)"
+    name_en: "Thistle"
+    category: "weed"
+    priority: "high"
+    description: "Колючий багаторічний бур'ян"
+    action: "remove"
+    color: [255, 100, 0]
+  
+  6:
+    name: "Осот польовий"
+    name_en: "Field Sowthistle"
+    category: "weed"
+    priority: "high"
+    description: "Багаторічний кореневищний бур'ян"
+    action: "remove"
+    color: [255, 100, 0]
+  
+  7:
+    name: "Пирій повзучий"
+    name_en: "Couch Grass"
+    category: "weed"
+    priority: "high"
+    description: "Злісний кореневищний бур'ян"
+    action: "remove"
+    color: [255, 120, 0]
+  
+  8:
+    name: "Хвощ польовий"
+    name_en: "Field Horsetail"
+    category: "weed"
+    priority: "medium"
+    description: "Індикатор кислих ґрунтів"
+    action: "monitor"
+    color: [255, 150, 0]
+  
+  9:
+    name: "Дурман звичайний"
+    name_en: "Jimsonweed"
+    category: "weed"
+    priority: "critical"
+    description: "Отруйна рослина!"
+    action: "remove"
+    color: [200, 0, 0]
+  
+  10:
+    name: "Болиголов плямистий"
+    name_en: "Poison Hemlock"
+    category: "weed"
+    priority: "critical"
+    description: "Дуже отруйна рослина!"
+    action: "remove"
+    color: [200, 0, 0]
+  
+  11:
+    name: "Щириця звичайна"
+    name_en: "Common Amaranth"
+    category: "weed"
+    priority: "high"
+    description: "Швидкорослий бур'ян"
+    action: "remove"
+    color: [255, 70, 0]
+  
+  12:
+    name: "Лобода біла"
+    name_en: "White Goosefoot"
+    category: "weed"
+    priority: "medium"
+    description: "Поширений однорічний бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  13:
+    name: "Плоскуха звичайна"
+    name_en: "Barnyard Grass"
+    category: "weed"
+    priority: "medium"
+    description: "Злаковий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  14:
+    name: "Мишій сизий"
+    name_en: "Green Foxtail"
+    category: "weed"
+    priority: "medium"
+    description: "Злаковий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  15:
+    name: "Мишій зелений"
+    name_en: "Yellow Foxtail"
+    category: "weed"
+    priority: "medium"
+    description: "Злаковий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  16:
+    name: "Пальчатка кров'яна"
+    name_en: "Crabgrass"
+    category: "weed"
+    priority: "medium"
+    description: "Злаковий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  17:
+    name: "Гірчак почечуйний"
+    name_en: "Spotted Lady's Thumb"
+    category: "weed"
+    priority: "low"
+    description: "Однорічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  18:
+    name: "Гірчак березкоподібний"
+    name_en: "Wild Buckwheat"
+    category: "weed"
+    priority: "medium"
+    description: "В'юнка рослина"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  19:
+    name: "Щавель кучерявий"
+    name_en: "Curly Dock"
+    category: "weed"
+    priority: "low"
+    description: "Багаторічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  20:
+    name: "Нетреба звичайна"
+    name_en: "Galium"
+    category: "weed"
+    priority: "low"
+    description: "Чіпка рослина"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  21:
+    name: "Ромашка непахуча"
+    name_en: "Scentless Chamomile"
+    category: "weed"
+    priority: "medium"
+    description: "Поширений бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  22:
+    name: "Ромашка лікарська"
+    name_en: "Chamomile"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  23:
+    name: "Кульбаба лікарська"
+    name_en: "Dandelion"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська рослина, медонос"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  24:
+    name: "Грицики звичайні"
+    name_en: "Shepherd's Purse"
+    category: "weed"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  25:
+    name: "Гірчиця польова"
+    name_en: "Field Mustard"
+    category: "weed"
+    priority: "medium"
+    description: "Хрестоцвітий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  26:
+    name: "Редька дика"
+    name_en: "Wild Radish"
+    category: "weed"
+    priority: "medium"
+    description: "Хрестоцвітий бур'ян"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  27:
+    name: "Талабан польовий"
+    name_en: "Field Pennycress"
+    category: "weed"
+    priority: "low"
+    description: "Однорічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  28:
+    name: "Глуха кропива"
+    name_en: "Dead Nettle"
+    category: "herb"
+    priority: "low"
+    description: "Медонос"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  29:
+    name: "Ясонець стеблообгортний"
+    name_en: "Henbit"
+    category: "weed"
+    priority: "low"
+    description: "Однорічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  30:
+    name: "Їжачій звичайний"
+    name_en: "Hedgehog Grass"
+    category: "weed"
+    priority: "low"
+    description: "Злаковий бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  31:
+    name: "Зірочник середній"
+    name_en: "Chickweed"
+    category: "weed"
+    priority: "low"
+    description: "Однорічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  32:
+    name: "Підмаренник чіпкий"
+    name_en: "Cleavers"
+    category: "weed"
+    priority: "medium"
+    description: "Чіпка рослина"
+    action: "remove"
+    color: [255, 150, 0]
+  
+  33:
+    name: "Молочай прутоподібний"
+    name_en: "Leafy Spurge"
+    category: "weed"
+    priority: "high"
+    description: "Отруйний бур'ян"
+    action: "remove"
+    color: [255, 100, 0]
+  
+  34:
+    name: "Вероніка польова"
+    name_en: "Field Speedwell"
+    category: "weed"
+    priority: "low"
+    description: "Дрібний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  35:
+    name: "Подорожник великий"
+    name_en: "Broadleaf Plantain"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  36:
+    name: "Спориш звичайний"
+    name_en: "Knotgrass"
+    category: "weed"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  37:
+    name: "Лобода розлога"
+    name_en: "Spreading Goosefoot"
+    category: "weed"
+    priority: "low"
+    description: "Однорічний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  38:
+    name: "Фіалка польова"
+    name_en: "Field Pansy"
+    category: "herb"
+    priority: "low"
+    description: "Декоративна рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  39:
+    name: "Рутка лікарська"
+    name_en: "Rue"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  40:
+    name: "Курослеп польовий"
+    name_en: "Field Chickweed"
+    category: "weed"
+    priority: "low"
+    description: "Дрібний бур'ян"
+    action: "monitor"
+    color: [255, 200, 0]
+  
+  41:
+    name: "Незабудка польова"
+    name_en: "Field Forget-me-not"
+    category: "herb"
+    priority: "low"
+    description: "Декоративна рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  42:
+    name: "Волошка синя"
+    name_en: "Cornflower"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська та декоративна рослина"
+    action: "preserve"
+    color: [0, 255, 150]
+  
+  43:
+    name: "Ружанка звичайна"
+    name_en: "Mallow"
+    category: "herb"
+    priority: "low"
+    description: "Лікарська рослина"
+    action: "preserve"
+    color: [0, 255, 100]
+  
+  44:
+    name: "Пшениця озима"
+    name_en: "Winter Wheat"
+    category: "crop"
+    priority: "critical"
+    description: "Основна зернова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  45:
+    name: "Ячмінь озимий"
+    name_en: "Winter Barley"
+    category: "crop"
+    priority: "critical"
+    description: "Зернова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  46:
+    name: "Жито озиме"
+    name_en: "Winter Rye"
+    category: "crop"
+    priority: "critical"
+    description: "Зернова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  47:
+    name: "Пшениця яра"
+    name_en: "Spring Wheat"
+    category: "crop"
+    priority: "critical"
+    description: "Зернова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  48:
+    name: "Овес"
+    name_en: "Oat"
+    category: "crop"
+    priority: "high"
+    description: "Зернова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  49:
+    name: "Гречка"
+    name_en: "Buckwheat"
+    category: "crop"
+    priority: "high"
+    description: "Крупяна культура, медонос"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  50:
+    name: "Просо"
+    name_en: "Millet"
+    category: "crop"
+    priority: "high"
+    description: "Крупяна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  51:
+    name: "Сорго"
+    name_en: "Sorghum"
+    category: "crop"
+    priority: "high"
+    description: "Кормова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  52:
+    name: "Кукурудза"
+    name_en: "Corn"
+    category: "crop"
+    priority: "critical"
+    description: "Основна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  53:
+    name: "Соняшник"
+    name_en: "Sunflower"
+    category: "crop"
+    priority: "critical"
+    description: "Олійна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  54:
+    name: "Ріпак озимий"
+    name_en: "Winter Rapeseed"
+    category: "crop"
+    priority: "critical"
+    description: "Олійна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  55:
+    name: "Ріпак ярий"
+    name_en: "Spring Rapeseed"
+    category: "crop"
+    priority: "critical"
+    description: "Олійна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  56:
+    name: "Льон олійний"
+    name_en: "Flax"
+    category: "crop"
+    priority: "high"
+    description: "Олійна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  57:
+    name: "Коноплі технічні"
+    name_en: "Industrial Hemp"
+    category: "crop"
+    priority: "high"
+    description: "Технічна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  58:
+    name: "Соя"
+    name_en: "Soybean"
+    category: "crop"
+    priority: "critical"
+    description: "Бобова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  59:
+    name: "Горох"
+    name_en: "Pea"
+    category: "crop"
+    priority: "high"
+    description: "Бобова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  60:
+    name: "Квасоля"
+    name_en: "Bean"
+    category: "crop"
+    priority: "high"
+    description: "Бобова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  61:
+    name: "Нут"
+    name_en: "Chickpea"
+    category: "crop"
+    priority: "high"
+    description: "Бобова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  62:
+    name: "Сочевиця"
+    name_en: "Lentil"
+    category: "crop"
+    priority: "high"
+    description: "Бобова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  63:
+    name: "Вика посівна"
+    name_en: "Common Vetch"
+    category: "crop"
+    priority: "medium"
+    description: "Кормова культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  64:
+    name: "Буряк цукровий"
+    name_en: "Sugar Beet"
+    category: "crop"
+    priority: "critical"
+    description: "Технічна культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  65:
+    name: "Картопля"
+    name_en: "Potato"
+    category: "crop"
+    priority: "critical"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  66:
+    name: "Морква"
+    name_en: "Carrot"
+    category: "crop"
+    priority: "high"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  67:
+    name: "Капуста білоголова"
+    name_en: "Cabbage"
+    category: "crop"
+    priority: "high"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  68:
+    name: "Цибуля"
+    name_en: "Onion"
+    category: "crop"
+    priority: "high"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  69:
+    name: "Томат"
+    name_en: "Tomato"
+    category: "crop"
+    priority: "high"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  70:
+    name: "Огірок"
+    name_en: "Cucumber"
+    category: "crop"
+    priority: "high"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+  
+  71:
+    name: "Гарбуз"
+    name_en: "Pumpkin"
+    category: "crop"
+    priority: "medium"
+    description: "Овочева культура"
+    action: "protect"
+    color: [0, 255, 0]
+
+# === СТАТИСТИКА ===
+statistics:
+  total_classes: 72
+  weeds: 35
+  crops: 28
+  herbs: 9
+  
+  by_priority:
+    critical: 18
+    high: 28
+    medium: 16
+    low: 10
+  
+  by_action:
+    remove: 35  # Видалити бур'яни
+    protect: 28  # Захищати культури
+    preserve: 9  # Зберегти корисні рослини
+    monitor: 0  # Спостерігати

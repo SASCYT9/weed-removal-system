@@ -1,0 +1,184 @@
+# 🌾 КОНФІГУРАЦІЯ СИСТЕМИ ДЕТЕКЦІЇ РОСЛИН
+# ==========================================
+
+# === МОДЕЛЬ ===
+model:
+  # Шлях до моделі (автовизначення best.pt/best.onnx/yolov8n.pt)
+  path: "best.onnx"
+  
+  # Розмір зображення для інференсу
+  # Рекомендовано: 320 (Pi), 640 (PC)
+  imgsz: 320
+  
+  # Поріг впевненості (0-1)
+  confidence_threshold: 0.55
+  
+  # IoU поріг для NMS
+  iou_threshold: 0.45
+  
+  # Експорт у ONNX для прискорення
+  use_onnx: true
+
+# === КАМЕРА ===
+camera:
+  # Тип камери: picamera/webcam/ip
+  type: "auto"  # auto визначить автоматично
+  
+  # Роздільна здатність
+  width: 640
+  height: 480
+  
+  # FPS
+  fps: 30
+  
+  # Індекс веб-камери (якщо webcam)
+  device_index: 0
+  
+  # IP адреса (якщо ip)
+  ip_url: ""
+  
+  # Raspberry Pi налаштування
+  pi:
+    width: 320
+    height: 240
+    fps: 30
+    tuning: 'awb_auto'
+
+# === ДЕТЕКЦІЯ ===
+detection:
+  # Детектувати кожен N-й кадр
+  process_every_n_frames: 3
+  
+  # Мінімальний розмір об'єкта (px)
+  min_object_size: 20
+  
+  # Tracking (відстеження між кадрами)
+  enable_tracking: true
+  max_tracking_distance: 50
+  
+  # Фільтрація детекцій
+  enable_filtering: true
+  smoothing_factor: 0.3
+
+# === КЛАСИФІКАЦІЯ ===
+classification:
+  # Категорії рослин
+  categories:
+    weeds:  # Бур'яни
+      enabled: true
+      color: [255, 0, 0]  # Червоний
+      priority: high
+    
+    crops:  # Культурні рослини
+      enabled: true
+      color: [0, 255, 0]  # Зелений
+      priority: medium
+    
+    unknown:  # Невідомі
+      enabled: true
+      color: [255, 255, 0]  # Жовтий
+      priority: low
+
+# === WEB ІНТЕРФЕЙС ===
+web:
+  # Хост та порт
+  host: "0.0.0.0"
+  port: 5000
+  
+  # Якість JPEG стріму (0-100)
+  jpeg_quality: 75
+  
+  # FPS стріму
+  stream_fps: 30
+  
+  # Мова інтерфейсу
+  language: "uk"
+  
+  # Тема
+  theme: "dark"
+
+# === ЛОГУВАННЯ ===
+logging:
+  # Рівень логування: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+  
+  # Зберігати лог у файл
+  save_to_file: true
+  log_file: "logs/system.log"
+  
+  # Максимальний розмір лог-файлу (MB)
+  max_log_size: 10
+  
+  # Кількість резервних копій
+  backup_count: 5
+
+# === ЗБЕРЕЖЕННЯ ДАНИХ ===
+storage:
+  # Зберігати детекції у БД
+  enable_database: true
+  db_path: "data/detections.db"
+  
+  # Зберігати знімки з детекціями
+  save_detections: true
+  save_path: "data/detections/"
+  
+  # Максимальна кількість знімків
+  max_saved_images: 1000
+  
+  # Зберігати статистику
+  save_statistics: true
+  stats_interval: 60  # секунди
+
+# === ОПТИМІЗАЦІЯ ===
+performance:
+  # Багатопотоковість
+  use_threading: true
+  num_threads: 4
+  
+  # Кешування
+  enable_cache: true
+  cache_size: 100
+  
+  # Raspberry Pi оптимізація
+  pi_optimization:
+    enabled: true
+    use_ncnn: false
+    use_tflite: false
+    low_power_mode: false
+
+# === СПОВІЩЕННЯ ===
+notifications:
+  # Telegram сповіщення
+  telegram:
+    enabled: false
+    bot_token: ""
+    chat_id: ""
+  
+  # Email сповіщення
+  email:
+    enabled: false
+    smtp_server: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    recipients: []
+
+# === РОЗШИРЕНІ ФУНКЦІЇ ===
+advanced:
+  # Статистика в реальному часі
+  real_time_stats: true
+  
+  # Експорт звітів
+  export_reports: true
+  report_format: "csv"  # csv/json/xlsx
+  
+  # API
+  enable_api: true
+  api_key: ""
+  
+  # MQTT для IoT
+  mqtt:
+    enabled: false
+    broker: ""
+    port: 1883
+    topic: "weed-system"

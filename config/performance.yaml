@@ -1,0 +1,66 @@
+# ⚡ PERFORMANCE CONFIG - 60 FPS TARGET
+
+# === MODEL OPTIMIZATION ===
+model:
+  format: 'onnx'  # Use ONNX for 2x speedup
+  imgsz: 320      # Optimal for Pi
+  half: true      # FP16 for 2x speedup (if GPU)
+  device: 'cpu'   # or '0' for GPU
+
+# === FRAME PROCESSING ===
+processing:
+  adaptive_skip: true    # Auto-adjust frame skip based on FPS
+  target_fps: 60
+  min_fps: 30
+  
+  # Frame skip rules
+  frame_skip:
+    high: 1    # Process every frame if FPS > 45
+    medium: 2  # Process every 2nd if FPS 30-45
+    low: 3     # Process every 3rd if FPS < 30
+  
+  # Frame optimization
+  resize: true
+  resize_method: 'linear'  # Fastest
+  max_size: 320
+
+# === ASYNC INFERENCE ===
+async:
+  enabled: true
+  queue_size: 2
+  threads: 2
+
+# === CACHING ===
+cache:
+  enabled: true
+  max_size: 30
+  ttl: 60  # seconds
+
+# === GPU OPTIMIZATION ===
+gpu:
+  cudnn_benchmark: true
+  empty_cache: true
+  mixed_precision: true
+
+# === PI SPECIFIC ===
+raspberry_pi:
+  use_tflite: false  # Use ONNX instead
+  cpu_threads: 4
+  memory_limit_mb: 512
+  low_power_mode: false
+
+# === DETECTION SETTINGS ===
+detection:
+  confidence: 0.5
+  iou: 0.45
+  max_det: 50  # Limit for speed
+  
+  # Post-processing
+  nms: true
+  agnostic_nms: false
+
+# === MONITORING ===
+monitoring:
+  log_fps: true
+  log_interval: 1.0  # seconds
+  alert_if_fps_below: 30
